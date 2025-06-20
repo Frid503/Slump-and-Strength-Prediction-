@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Concrete Mix Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    h2 {
+      text-align: center;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e0ffe0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Concrete Mix Predictor</h2>
+    <label>Fineness Modulus (FM):</label>
+    <input type="number" step="any" id="fm">
+
+    <label>Binder-to-Aggregate Ratio:</label>
+    <input type="number" step="any" id="ba">
+
+    <label>Water-to-Cement Ratio:</label>
+    <input type="number" step="any" id="wc">
+
+    <button onclick="predict()">Estimate Strength & Slump</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function predict() {
+      const fm = parseFloat(document.getElementById("fm").value);
+      const ba = parseFloat(document.getElementById("ba").value);
+      const wc = parseFloat(document.getElementById("wc").value);
+
+      if (isNaN(fm) || isNaN(ba) || isNaN(wc)) {
+        document.getElementById("result").innerHTML = "Please enter valid numbers.";
+        return;
+      }
+
+      let strength, slump;
+
+      if (wc <= 0.48) {
+        strength = 51;
+        slump = 150;
+      } else {
+        strength = ba <= 0.23 ? 48 : 46;
+        slump = ba <= 0.23 ? 95 : 185;
+      }
+
+      document.getElementById("result").innerHTML =
+        `<strong>Estimated Strength:</strong> ${strength} MPa<br>` +
+        `<strong>Estimated Slump:</strong> ${slump} mm`;
+    }
+  </script>
+</body>
+</html>
